@@ -24,3 +24,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 //Route::get('post', Posts::class);
 //Route::resource('post', 'PostController', ['except' => ['create']]);
 Route::get('/post', Posts::class)->name('post');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

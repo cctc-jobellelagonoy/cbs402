@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Livewire;
-
+use Illuminate\Support\Facades\Crypt;
 use Livewire\Component;
 use App\Models\Post;
 
@@ -76,8 +76,8 @@ class Posts extends Component
         ]);
 
         Post::updateOrCreate(['id' => $this->post_id], [
-            'title' => $this->title,
-            'body' => $this->body
+            'title' => Crypt::encryptString($this->title),
+            'body' => Crypt::encryptString($this->body)
         ]);
 
         session()->flash('message',
@@ -95,8 +95,8 @@ class Posts extends Component
     {
         $post = Post::findOrFail($id);
         $this->post_id = $id;
-        $this->title = $post->title;
-        $this->body = $post->body;
+        $this->title = Crypt::decryptString($post->title);
+        $this->body = Crypt::decryptString($post->body);
 
         $this->openModal();
     }

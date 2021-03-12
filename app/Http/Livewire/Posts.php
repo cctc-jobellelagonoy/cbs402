@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Http\Livewire;
+
 use Illuminate\Support\Facades\Crypt;
 use Livewire\Component;
 use App\Models\Post;
+use Auth;
 
 class Posts extends Component
 {
@@ -70,6 +72,7 @@ class Posts extends Component
      */
     public function store()
     {
+        $user = Auth::user();
         $this->validate([
             'title' => 'required',
             'body' => 'required',
@@ -83,6 +86,21 @@ class Posts extends Component
         session()->flash('message',
             $this->post_id ? 'Post Updated Successfully.' : 'Post Created Successfully.');
 
+        if($this->post_id){
+            activity($this->title)
+            ->causedBy($user)
+            //->withProperties(['customProperty' => 'customValue'])
+            ->log('Book updated by ' . Crypt::decryptString($user->name));
+        }
+        else{
+            activity($this->title)
+            ->causedBy($user)
+            //->withProperties(['customProperty' => 'customValue'])
+            ->log('Book created by ' . Crypt::decryptString($user->name));
+        }
+
+
+
         $this->closeModal();
         $this->resetInputFields();
     }
@@ -93,10 +111,14 @@ class Posts extends Component
      */
     public function edit($id)
     {
+        $user = Auth::user();
         $post = Post::findOrFail($id);
         $this->post_id = $id;
         $this->title = Crypt::decryptString($post->title);
         $this->body = Crypt::decryptString($post->body);
+
+
+
 
         $this->openModal();
     }
@@ -108,7 +130,18 @@ class Posts extends Component
      */
     public function delete($id)
     {
+        $user = Auth::user();
+        $post = Post::findOrFail($id);
+        $this->title = Crypt::decryptString($post->title);
+        $this->body = Crypt::decryptString($post->body);
+
+        activity($this->title)
+        ->causedBy($user)
+        //->withProperties(['customProperty' => 'customValue'])
+        ->log('Book deleted by ' . Crypt::decryptString($user->name));
+
         Post::find($id)->delete();
         session()->flash('message', 'Post Deleted Successfully.');
+
     }
 }

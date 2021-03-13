@@ -90,13 +90,13 @@ class Posts extends Component
             activity($this->title)
             ->causedBy($user)
             //->withProperties(['customProperty' => 'customValue'])
-            ->log('Book updated by ' . Crypt::decryptString($user->name));
+            ->log('Book updated by ' . $user->name);
         }
         else{
             activity($this->title)
             ->causedBy($user)
             //->withProperties(['customProperty' => 'customValue'])
-            ->log('Book created by ' . Crypt::decryptString($user->name));
+            ->log('Book created by ' . $user->name);
         }
 
 
@@ -138,7 +138,7 @@ class Posts extends Component
         activity($this->title)
         ->causedBy($user)
         //->withProperties(['customProperty' => 'customValue'])
-        ->log('Book deleted by ' . Crypt::decryptString($user->name));
+        ->log('Book deleted by ' . $user->name);
 
         Post::find($id)->delete();
         session()->flash('message', 'Post Deleted Successfully.');

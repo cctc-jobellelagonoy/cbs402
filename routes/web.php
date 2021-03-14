@@ -35,6 +35,6 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/forgot-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'index'])->name('forgot-password');
 Route::post('/forgot-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'index'])->name('forgot-password');
 
-Route::get('/reset-password/{token}', function ($token) {
-    return view('auth.reset-password', ['token' => $token]);
-})->middleware('guest')->name('password.reset');
+Route::get('/reset-password', [App\Http\Controllers\Auth\ResetPasswordController::class, 'index'])->name('reset-password');
+Route::post('/reset-password', [App\Http\Controllers\Auth\ResetPasswordController::class, 'index'])->name('reset-password');
+

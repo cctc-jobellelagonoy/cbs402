@@ -37,4 +37,3 @@ Route::post('/forgot-password', [App\Http\Controllers\Auth\ForgotPasswordControl
 
 Route::get('/reset-password', [App\Http\Controllers\Auth\ResetPasswordController::class, 'index'])->name('reset-password');
 Route::post('/reset-password', [App\Http\Controllers\Auth\ResetPasswordController::class, 'index'])->name('reset-password');
-

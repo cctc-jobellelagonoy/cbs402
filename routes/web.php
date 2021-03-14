@@ -2,6 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Livewire\Posts;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,10 +26,15 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-//Route::get('post', Posts::class);
-//Route::resource('post', 'PostController', ['except' => ['create']]);
 Route::get('/post', Posts::class)->name('post');
 
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/forgot-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'index'])->name('forgot-password');
+Route::post('/forgot-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'index'])->name('forgot-password');
+
+Route::get('/reset-password/{token}', function ($token) {
+    return view('auth.reset-password', ['token' => $token]);
+})->middleware('guest')->name('password.reset');
